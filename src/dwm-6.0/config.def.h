@@ -84,6 +84,16 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_h,           togglehorizontalmax, NULL },
+	{ MODKEY|ControlMask|ShiftMask, XK_l,           togglehorizontalmax, NULL },
+	{ MODKEY|ControlMask|ShiftMask, XK_j,           toggleverticalmax,   NULL },
+	{ MODKEY|ControlMask|ShiftMask, XK_k,           toggleverticalmax,   NULL },
+	{ MODKEY|ControlMask,           XK_m,           togglemaximize,      {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_h,           togglehorizontalmax, NULL },
+	{ MODKEY|ControlMask|ShiftMask, XK_l,           togglehorizontalmax, NULL },
+	{ MODKEY|ControlMask|ShiftMask, XK_j,           toggleverticalmax,   NULL },
+	{ MODKEY|ControlMask|ShiftMask, XK_k,           toggleverticalmax,   NULL },
+	{ MODKEY|ControlMask,           XK_m,           togglemaximize,      {0} },
 };
 
 /* button definitions */
