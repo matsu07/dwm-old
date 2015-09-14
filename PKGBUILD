@@ -11,16 +11,14 @@ install=dwm.install
 source=(http://dl.suckless.org/dwm/dwm-$pkgver.tar.gz
 	dwm.desktop
 	config.h
-  bstack.c
-  gaplessgrid.c
-  push.c)
-_patches=(01-statuscolours.diff
-          02-monoclecount.diff
-          03-noborder.diff
-          04-centredfloating.diff
-          05-scratchpad.diff
-          06-attachaside.diff
-          07-nopaddedbar.diff)
+  	gaplessgrid.c)
+
+_patches=(01-6.0-swapfocus.diff
+          02-6.0-maximize.diff
+          03-6.0-pertag.diff
+          04-6.0-statuscolors.diff
+          05-6.0-pango.diff)
+
 source=(${source[@]} ${_patches[@]})
 
 build() {
@@ -33,9 +31,7 @@ build() {
   done
 
   cp $srcdir/config.h config.h
-  cp $srcdir/bstack.c bstack.c
   cp $srcdir/gaplessgrid.c gaplessgrid.c
-  cp $srcdir/push.c push.c
 
   sed -i 's/CPPFLAGS =/CPPFLAGS +=/g' config.mk
   sed -i 's/^CFLAGS = -g/#CFLAGS += -g/g' config.mk
