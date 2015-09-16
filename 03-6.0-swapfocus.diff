@@ -6,7 +6,7 @@ last used window.
 diff -r ec4baab78314 dwm.c
 --- a/dwm.c	Mon Dec 19 15:38:30 2011 +0100
 +++ b/dwm.c	Fri Apr 06 08:23:42 2012 +0200
-@@ -224,6 +224,7 @@
+@@ -239,6 +239,7 @@
  static void showhide(Client *c);
  static void sigchld(int unused);
  static void spawn(const Arg *arg);
@@ -14,7 +14,7 @@ diff -r ec4baab78314 dwm.c
  static void tag(const Arg *arg);
  static void tagmon(const Arg *arg);
  static int textnw(const char *text, unsigned int len);
-@@ -253,6 +254,7 @@
+@@ -268,6 +269,7 @@
  static void zoom(const Arg *arg);
  
  /* variables */
@@ -37,7 +37,7 @@ diff -r ec4baab78314 dwm.c
  tag(const Arg *arg) {
  	if(selmon->sel && arg->ui & TAGMASK) {
  		selmon->sel->tags = arg->ui & TAGMASK;
-@@ -1775,6 +1785,7 @@
+@@ -1772,6 +1782,7 @@
  unfocus(Client *c, Bool setfocus) {
  	if(!c)
  		return;
@@ -45,7 +45,7 @@ diff -r ec4baab78314 dwm.c
  	grabbuttons(c, False);
  	XSetWindowBorder(dpy, c->win, dc.norm[ColBorder]);
  	if(setfocus)
-@@ -2116,6 +2127,7 @@
+@@ -2113,6 +2124,7 @@
  void
  zoom(const Arg *arg) {
  	Client *c = selmon->sel;
