@@ -15,9 +15,9 @@ source=(http://dl.suckless.org/dwm/dwm-$pkgver.tar.gz
 
 _patches=(01-6.0-swapfocus.diff
           02-6.0-maximize.diff
-          03-6.0-pertag.diff
-          04-6.0-statuscolors.diff
-          05-6.0-pango.diff)
+	  03-6.0-pertag.diff
+	  04-6.0-statuscolors.diff
+	  05-6.0-pango.diff)
 
 source=(${source[@]} ${_patches[@]})
 
@@ -50,14 +50,10 @@ package() {
 }
 md5sums=('8bb00d4142259beb11e13473b81c0857'
          '939f403a71b6e85261d09fc3412269ee'
-         'db8a40d51592ca6e2c7bc1b99d960e10'
-         '362e07f0f042875b84d7739d9d8855c4'
+         'da2700812b7b327c6228b1a6a44095ae'
          '4ba509b3b93f7b1418dc703c70de536f'
-         '689534c579b1782440ddcaf71537d8fd'
-         '57b1a8f21b61c55f906d7cc075111613'
-         'e3faeea09a554bbbce29c4d480b0ca41'
-         '1f0244803c0188f1b6f4e5794e7f5ca2'
-         'ed11483bfccbf65ff9714c0ca4e7bb23'
-         'bc6240f3adadf604a450f6375badec61'
-         'a92ee04c33b1082da61b55d3617249eb'
-         '29213fff0d93fc3a7183948f6c792ac5')
+         '193bf954715fc28528cd087e76adf130'
+         '6189d9a996de1a70c754221b90093d49'
+         'b09aea93bdd32a4a2e0e942e802d195c'
+         '71f262d3dfbe5deb88b015702a9de46d'
+         '7ffbbbc21ea48e7525a415c4b67d0901')
