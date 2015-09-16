@@ -14,11 +14,7 @@ source=(http://dl.suckless.org/dwm/dwm-$pkgver.tar.gz
   	gaplessgrid.c)
 
 _patches=(01-6.0-pango.diff
-          02-6.0-maximize.diff
-	  03-6.0-swapfocus.diff
-	  04-6.0-pertag.diff
-	  05-6.0-betterborders.diff
-	  06-6.0-statuscolors.diff)
+	  02-6.0-maximize.diff)
 
 source=(${source[@]} ${_patches[@]})
 
@@ -54,8 +50,4 @@ md5sums=('8bb00d4142259beb11e13473b81c0857'
          '39fbfaa423ebc40b1ecb92eecf4ea638'
          '4ba509b3b93f7b1418dc703c70de536f'
          '983aa266382db7e0e05e93617f33024e'
-         '6189d9a996de1a70c754221b90093d49'
-         '193bf954715fc28528cd087e76adf130'
-         'b09aea93bdd32a4a2e0e942e802d195c'
-         '6d45859e5eec6ac01bfee3bfbf1ba365'
-         '71f262d3dfbe5deb88b015702a9de46d')
+         '7a598c9fbb18bac61faab67a3fe42a86')

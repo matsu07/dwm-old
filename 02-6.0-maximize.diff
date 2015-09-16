@@ -6,7 +6,7 @@ using keybindings.
 diff -r ec4baab78314 dwm.c
 --- a/dwm.c	Mon Dec 19 15:38:30 2011 +0100
 +++ b/dwm.c	Fri Apr 06 08:23:23 2012 +0200
-@@ -90,7 +90,7 @@
+@@ -98,7 +98,7 @@
  	int basew, baseh, incw, inch, maxw, maxh, minw, minh;
  	int bw, oldbw;
  	unsigned int tags;
@@ -15,7 +15,7 @@ diff -r ec4baab78314 dwm.c
  	Client *next;
  	Client *snext;
  	Monitor *mon;
-@@ -1153,6 +1153,8 @@
+@@ -1144,6 +1144,8 @@
  	updatewmhints(c);
  	XSelectInput(dpy, w, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
  	grabbuttons(c, False);
