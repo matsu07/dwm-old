@@ -1,33 +1,7 @@
-diff -u dwm_original/config.def.h dwm_xft/config.def.h
---- dwm_original/config.def.h	2012-01-09 19:07:41.065029408 +0400
-+++ dwm_xft/config.def.h	2012-01-09 19:02:02.313506614 +0400
-@@ -1,7 +1,7 @@
- /* See LICENSE file for copyright and license details. */
- 
- /* appearance */
--static const char font[]            = "-*-terminus-medium-r-*-*-16-*-*-*-*-*-*-*";
-+static const char font[]            = "Sans 8";
- static const char normbordercolor[] = "#444444";
- static const char normbgcolor[]     = "#222222";
- static const char normfgcolor[]     = "#bbbbbb";
-diff -u dwm_original/config.mk dwm_xft/config.mk
---- dwm_original/config.mk	2012-01-09 19:07:41.065029408 +0400
-+++ dwm_xft/config.mk	2012-01-09 19:03:39.721464085 +0400
-@@ -15,8 +15,8 @@
- XINERAMAFLAGS = -DXINERAMA
- 
- # includes and libs
--INCS = -I. -I/usr/include -I${X11INC}
--LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 ${XINERAMALIBS}
-+INCS = -I. -I/usr/include -I${X11INC} `pkg-config --cflags xft pango pangoxft`
-+LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 ${XINERAMALIBS} `pkg-config --libs xft pango pangoxft`
- 
- # flags
- CPPFLAGS = -D_BSD_SOURCE -D_POSIX_C_SOURCE=2 -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
 diff -u dwm_original/dwm.c dwm_xft/dwm.c
---- dwm_original/dwm.c	2012-01-09 19:07:41.065029408 +0400
-+++ dwm_xft/dwm.c	2012-01-09 19:07:17.705012468 +0400
-@@ -36,6 +36,10 @@
+--- a/dwm.c	2012-01-09 19:07:41.065029408 +0400
++++ b/dwm.c	2012-01-09 19:07:17.705012468 +0400
+@@ -36,8 +36,11 @@
  #include <X11/Xlib.h>
  #include <X11/Xproto.h>
  #include <X11/Xutil.h>
@@ -35,10 +9,12 @@ diff -u dwm_original/dwm.c dwm_xft/dwm.c
 +#include <pango/pango.h>
 +#include <pango/pangoxft.h>
 +#include <pango/pango-font.h>
+ #include <fontconfig/fontconfig.h>
+-#include <X11/Xft/Xft.h>
  #ifdef XINERAMA
  #include <X11/extensions/Xinerama.h>
  #endif /* XINERAMA */
-@@ -47,8 +51,12 @@
+@@ -49,9 +52,13 @@
                                 * MAX(0, MIN((y)+(h),(m)->wy+(m)->wh) - MAX((y),(m)->wy)))
  #define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]))
  #define LENGTH(X)               (sizeof X / sizeof X[0])
@@ -49,11 +25,12 @@ diff -u dwm_original/dwm.c dwm_xft/dwm.c
 +#ifndef MIN
  #define MIN(A, B)               ((A) < (B) ? (A) : (B))
 +#endif
+ #define MAXCOLORS				21
  #define MOUSEMASK               (BUTTONMASK|PointerMotionMask)
  #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
  #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
-@@ -103,12 +111,19 @@
- 	unsigned long sel[ColLast];
+@@ -123,12 +130,19 @@
+ 	XftColor colors[MAXCOLORS][ColLast];
  	Drawable drawable;
  	GC gc;
 +
@@ -69,114 +46,82 @@ diff -u dwm_original/dwm.c dwm_xft/dwm.c
  		int ascent;
  		int descent;
  		int height;
--		XFontSet set;
--		XFontStruct *xfont;
+ 		XftFont *xfont;
  	} font;
  } DC; /* draw context */
  
-@@ -186,7 +201,7 @@
+@@ -228,7 +244,7 @@
  static void focusin(XEvent *e);
  static void focusmon(const Arg *arg);
  static void focusstack(const Arg *arg);
--static unsigned long getcolor(const char *colstr);
-+//static unsigned long getcolor(const char *colstr);
+ static Atom getatomprop(Client *c, Atom prop);
+-static XftColor getcolor(const char *colstr);
++//static XftColor getcolor(const char *colstr);
  static Bool getrootptr(int *x, int *y);
  static long getstate(Window w);
  static Bool gettextprop(Window w, Atom atom, char *text, unsigned int size);
-@@ -485,10 +500,6 @@
- 	for(m = mons; m; m = m->next)
- 		while(m->stack)
- 			unmanage(m->stack, False);
--	if(dc.font.set)
--		XFreeFontSet(dpy, dc.font.set);
--	else
--		XFreeFont(dpy, dc.font.xfont);
- 	XUngrabKey(dpy, AnyKey, AnyModifier, root);
- 	XFreePixmap(dpy, dc.drawable);
- 	XFreeGC(dpy, dc.gc);
-@@ -581,6 +592,7 @@
+@@ -711,6 +727,7 @@
  			if(dc.drawable != 0)
  				XFreePixmap(dpy, dc.drawable);
  			dc.drawable = XCreatePixmap(dpy, root, sw, bh, DefaultDepth(dpy, screen));
 +			XftDrawChange(dc.xftdrawable, dc.drawable);
  			updatebars();
  			for(m = mons; m; m = m->next)
- 				XMoveResizeWindow(dpy, m->barwin, m->wx, m->by, m->ww, bh);
-@@ -796,7 +808,7 @@
- 		return;
- 	olen = strlen(text);
- 	h = dc.font.ascent + dc.font.descent;
--	y = dc.y + (dc.h / 2) - (h / 2) + dc.font.ascent;
+ 				resizebarwin(m);
+@@ -974,7 +991,7 @@
+		return;
+	olen = strlen(text);
+	h = pad ? (dc.font.ascent + dc.font.descent) : 0;
+-	y = dc.y + ((dc.h + dc.font.ascent - dc.font.descent) / 2);
 +	y = dc.y;
- 	x = dc.x + (h / 2);
+	x = dc.x + (h / 2);
  	/* shorten text if necessary */
  	for(len = MIN(olen, sizeof buf); len && textnw(text, len) > dc.w - h; len--);
-@@ -805,11 +817,8 @@
+@@ -983,11 +1000,8 @@
  	memcpy(buf, text, len);
  	if(len < olen)
  		for(i = len; i && i > len - 3; buf[--i] = '.');
--	XSetForeground(dpy, dc.gc, col[invert ? ColBG : ColFG]);
--	if(dc.font.set)
--		XmbDrawString(dpy, dc.drawable, dc.font.set, dc.gc, x, y, buf, len);
--	else
--		XDrawString(dpy, dc.drawable, dc.gc, x, y, buf, len);
+
+-	d = XftDrawCreate(dpy, dc.drawable, DefaultVisual(dpy, screen), DefaultColormap(dpy,screen));
+-
+-	XftDrawStringUtf8(d, (XftColor *) &col[ColFG].pixel, dc.font.xfont, x, y, (XftChar8 *) buf, len);
+-	XftDrawDestroy(d);
 +	pango_layout_set_text(dc.plo, text, len);
 +	pango_xft_render_layout(dc.xftdrawable, (col==dc.norm?dc.xftnorm:dc.xftsel)+(invert?ColBG:ColFG), dc.plo, x * PANGO_SCALE, y * PANGO_SCALE);
  }
  
  void
-@@ -927,13 +936,13 @@
+@@ -1112,13 +1127,13 @@
  }
  
  unsigned long
 -getcolor(const char *colstr) {
 +getcolor(const char *colstr, XftColor *color) {
- 	Colormap cmap = DefaultColormap(dpy, screen);
--	XColor color;
+-	XftColor color;
++ 	Colormap cmap = DefaultColormap(dpy, screen);
 +	Visual *vis = DefaultVisual(dpy, screen);
  
--	if(!XAllocNamedColor(dpy, cmap, colstr, &color, &color))
+-	if(!XftColorAllocName(dpy, DefaultVisual(dpy, screen), DefaultColormap(dpy, screen), colstr, &color))
 +	if(!XftColorAllocName(dpy,vis,cmap,colstr, color))
  		die("error, cannot allocate color '%s'\n", colstr);
--	return color.pixel;
+-	return color;
 +	return color->pixel;
  }
  
  Bool
 @@ -1034,35 +1043,19 @@
+@@ -1128,35 +1043,19 @@
  
  void
  initfont(const char *fontstr) {
--	char *def, **missing;
--	int n;
-+	PangoFontMetrics *metrics;
  
--	dc.font.set = XCreateFontSet(dpy, fontstr, &missing, &n, &def);
--	if(missing) {
--		while(n--)
--			fprintf(stderr, "dwm: missing fontset: %s\n", missing[n]);
--		XFreeStringList(missing);
--	}
--	if(dc.font.set) {
--		XFontStruct **xfonts;
--		char **font_names;
+-	if(!(dc.font.xfont = XftFontOpenName(dpy,screen,fontstr))
+-	&& !(dc.font.xfont = XftFontOpenName(dpy,screen,"fixed")))
+-		die("error, cannot load font: '%s'\n", fontstr);
 -
--		dc.font.ascent = dc.font.descent = 0;
--		XExtentsOfFontSet(dc.font.set);
--		n = XFontsOfFontSet(dc.font.set, &xfonts, &font_names);
--		while(n--) {
--			dc.font.ascent = MAX(dc.font.ascent, (*xfonts)->ascent);
--			dc.font.descent = MAX(dc.font.descent,(*xfonts)->descent);
--			xfonts++;
--		}
--	}
--	else {
--		if(!(dc.font.xfont = XLoadQueryFont(dpy, fontstr))
--		&& !(dc.font.xfont = XLoadQueryFont(dpy, "fixed")))
--			die("error, cannot load font: '%s'\n", fontstr);
--		dc.font.ascent = dc.font.xfont->ascent;
--		dc.font.descent = dc.font.xfont->descent;
--	}
+-	dc.font.ascent = dc.font.xfont->ascent;
+-	dc.font.descent = dc.font.xfont->descent;
++	PangoFontMetrics *metrics;
 +	dc.pgc = pango_xft_get_context(dpy, screen);
 +	dc.pfd = pango_font_description_from_string(fontstr);
 +
@@ -226,16 +171,28 @@ diff -u dwm_original/dwm.c dwm_xft/dwm.c
  	updatestatus();
  	/* EWMH support per view */
 @@ -1692,13 +1690,10 @@
+@@ -1692,13 +1690,10 @@
  
  int
  textnw(const char *text, unsigned int len) {
--	XRectangle r;
+-	// remove non-printing color codes before calculating width
+-	char *ptr = (char *) text;
+-	unsigned int i, ibuf, lenbuf=len;
+-	char buf[len+1];
 -
--	if(dc.font.set) {
--		XmbTextExtents(dc.font.set, text, len, NULL, &r);
--		return r.width;
+-	for(i=0, ibuf=0; *ptr && i<len; i++, ptr++) {
+-		if(*ptr <= NUMCOLORS && *ptr > 0) {
+-			if (i < len) { lenbuf--; }
+-		} else {
+-			buf[ibuf]=*ptr;
+-			ibuf++;
+-		}
 -	}
--	return XTextWidth(dc.font.xfont, text, len);
+-	buf[ibuf]=0;
+-
+-	XGlyphInfo ext;
+-	XftTextExtentsUtf8(dpy, dc.font.xfont, (XftChar8 *) buf, lenbuf, &ext);
+-	return ext.xOff 
 +	PangoRectangle r;
 +	pango_layout_set_text(dc.plo, text, len);
 +	pango_layout_get_extents(dc.plo, 0, &r);

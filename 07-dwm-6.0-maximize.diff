@@ -1,0 +1,26 @@
+Author: Jan Christoph Ebersbach <jceb@e-jc.de>
+URL: http://dwm.suckless.org/patches/historical/moveresize
+These patches provide helper functions for moving and resizing floating windows
+using keybindings.
+Adapted by Kelvin Matsumoto to dwm-pango
+diff -r ec4baab78314 dwm.c
+--- a/dwm.c	Mon Dec 19 15:38:30 2011 +0100
++++ b/dwm.c	Fri Apr 06 08:23:23 2012 +0200
+@@ -111,7 +111,7 @@
+ 	int basew, baseh, incw, inch, maxw, maxh, minw, minh;
+ 	int bw, oldbw;
+ 	unsigned int tags;
+-	Bool isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
++	Bool ismax, wasfloating, isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
+ 	Client *next;
+ 	Client *snext;
+ 	Monitor *mon;
+@@ -1328,6 +1328,8 @@
+ 	updatewmhints(c);
+ 	XSelectInput(dpy, w, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
+ 	grabbuttons(c, False);
++	c->wasfloating = False;
++	c->ismax = False;
+ 	if(!c->isfloating)
+ 		c->isfloating = c->oldstate = trans != None || c->isfixed;
+ 	if(c->isfloating)

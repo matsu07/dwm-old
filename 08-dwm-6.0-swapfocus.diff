@@ -6,7 +6,7 @@ last used window.
 diff -r ec4baab78314 dwm.c
 --- a/dwm.c	Mon Dec 19 15:38:30 2011 +0100
 +++ b/dwm.c	Fri Apr 06 08:23:42 2012 +0200
-@@ -239,6 +239,7 @@
+@@ -265,6 +265,7 @@
  static void showhide(Client *c);
  static void sigchld(int unused);
  static void spawn(const Arg *arg);
@@ -14,15 +14,13 @@ diff -r ec4baab78314 dwm.c
  static void tag(const Arg *arg);
  static void tagmon(const Arg *arg);
  static int textnw(const char *text, unsigned int len);
-@@ -268,6 +269,7 @@
+@@ -298,4 +299,5 @@
  static void zoom(const Arg *arg);
  
  /* variables */
 +static Client *prevclient = NULL;
- static const char broken[] = "broken";
- static char stext[256];
- static int screen;
-@@ -1675,6 +1677,14 @@
+ static Systray *systray = NULL;
+@@ -1918,6 +1920,14 @@
  }
  
  void
@@ -37,7 +35,7 @@ diff -r ec4baab78314 dwm.c
  tag(const Arg *arg) {
  	if(selmon->sel && arg->ui & TAGMASK) {
  		selmon->sel->tags = arg->ui & TAGMASK;
-@@ -1772,6 +1782,7 @@
+@@ -2051,6 +2061,7 @@
  unfocus(Client *c, Bool setfocus) {
  	if(!c)
  		return;
@@ -45,7 +43,7 @@ diff -r ec4baab78314 dwm.c
  	grabbuttons(c, False);
  	XSetWindowBorder(dpy, c->win, dc.norm[ColBorder]);
  	if(setfocus)
-@@ -2113,6 +2124,7 @@
+@@ -2529,6 +2540,7 @@
  void
  zoom(const Arg *arg) {
  	Client *c = selmon->sel;

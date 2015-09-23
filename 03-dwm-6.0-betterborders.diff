@@ -7,7 +7,7 @@ diff --git a/dwm.c b/dwm.c
 index ffc8864..3ce8ebe 100644
 --- a/dwm.c
 +++ b/dwm.c
-@@ -349,6 +349,34 @@ applyrules(Client *c) {
+@@ -336,6 +336,34 @@ applyrules(Client *c) {
  	c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : c->mon->tagset[c->mon->seltags];
  }
  
@@ -42,7 +42,7 @@ index ffc8864..3ce8ebe 100644
  Bool
  applysizehints(Client *c, int *x, int *y, int *w, int *h, Bool interact) {
  	Bool baseismin;
-@@ -417,10 +445,13 @@ applysizehints(Client *c, int *x, int *y, int *w, int *h, Bool interact) {
+@@ -404,10 +432,13 @@ applysizehints(Client *c, int *x, int *y, int *w, int *h, Bool interact) {
  
  void
  arrange(Monitor *m) {
@@ -55,10 +55,10 @@ index ffc8864..3ce8ebe 100644
 +		adjustborders(m);
  		showhide(m->stack);
 +	}
- 	if(m) {
+ 	if(m)
  		arrangemon(m);
- 		restack(m);
-@@ -1180,7 +1211,20 @@ manage(Window w, XWindowAttributes *wa) {
+ 	else for(m = mons; m; m = m->next)
+@@ -1143,7 +1174,20 @@ manage(Window w, XWindowAttributes *wa) {
  	/* only fix client y-offset, if the client center might cover the bar */
  	c->y = MAX(c->y, ((c->mon->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
  	           && (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
@@ -80,7 +80,7 @@ index ffc8864..3ce8ebe 100644
  
  	wc.border_width = c->bw;
  	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
-@@ -2090,7 +2134,8 @@ updatewindowtype(Client *c) {
+@@ -2023,7 +2067,8 @@ updatewindowtype(Client *c) {
  	Atom state = getatomprop(c, netatom[NetWMState]);
  	Atom wtype = getatomprop(c, netatom[NetWMWindowType]);
  
