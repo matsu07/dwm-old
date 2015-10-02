@@ -8,7 +8,7 @@
  	Window barwin;
  	const Layout *lt[2];
  	int curtag;
-@@ -573,6 +574,7 @@
+@@ -602,6 +603,7 @@
  	}
  	XUnmapWindow(dpy, mon->barwin);
  	XDestroyWindow(dpy, mon->barwin);
@@ -16,7 +16,7 @@
  	free(mon->mfacts);
  	free(mon->nmasters);
  	free(mon->lts);
-@@ -917,8 +919,8 @@
+@@ -1023,8 +1025,8 @@
  	int i, x, y, h, len, olen;
  	XftDraw *d;
  
@@ -27,7 +27,7 @@
  	if(!text)
  		return;
  	olen = strlen(text);
-@@ -2023,6 +2025,8 @@
+@@ -2208,6 +2210,8 @@
  		m->barwin = XCreateWindow(dpy, root, m->wx, m->by, w, bh, 0, DefaultDepth(dpy, screen),
  		                          CopyFromParent, DefaultVisual(dpy, screen),
  		                          CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);

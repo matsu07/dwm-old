@@ -1,5 +1,5 @@
---- dwm.c	2012-11-13 17:33:28.323969464 +0530
-+++ again-nailed-it-dwm.c	2012-11-13 17:28:11.343504000 +0530
+--- a/dwm.c	2012-11-13 17:33:28.323969464 +0530
++++ b/dwm.c	2012-11-13 17:28:11.343504000 +0530
 @@ -39,6 +39,9 @@
  #include <fontconfig/fontconfig.h>
  #include <X11/Xft/Xft.h>
@@ -34,25 +34,14 @@
  	struct {
  		int ascent;
  		int descent;
-@@ -924,13 +935,15 @@ drawtext(const char *text, XftColor col[
- 	int i, x, y, h, len, olen;
- 	XftDraw *d;
- 
--	//XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, dc.w,  dc.h);
-+	//XSetForeground(dpy, dc.gc, col[ColBG].pixel);
-+	//XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, dc.w, dc.h);
- 	XCopyArea(dpy, selmon->bartrans, dc.drawable, dc.gc, dc.x, dc.y, dc.w, dc.h, dc.x, dc.y);
- 	if(!text)
- 		return;
- 	olen = strlen(text);
- 	h = pad ? (dc.font.ascent + dc.font.descent) : 0;
+@@ -1030,5 +1041,5 @@
+	olen = strlen(text);
+	h = pad ? (dc.font.ascent + dc.font.descent) : 0;
 -	y = dc.y + ((dc.h + dc.font.ascent - dc.font.descent) / 2);
-+//	y = dc.y + ((dc.h + dc.font.ascent - dc.font.descent) / 2);
 +	y = dc.y + 1;
- 	x = dc.x + (h / 2);
- 	/* shorten text if necessary */
- 	for(len = MIN(olen, sizeof buf); len && textnw(text, len) > dc.w - h; len--);
-@@ -942,7 +955,9 @@ drawtext(const char *text, XftColor col[
+	x = dc.x + (h / 2);
+	/* shorten text if necessary */
+@@ -1043,7 +1056,9 @@ drawtext(const char *text, XftColor col[
  
  	d = XftDrawCreate(dpy, dc.drawable, DefaultVisual(dpy, screen), DefaultColormap(dpy,screen));
  
@@ -63,7 +52,7 @@
  	XftDrawDestroy(d);
  }
  
-@@ -1166,13 +1181,22 @@ incnmaster(const Arg *arg) {
+@@ -1286,13 +1301,22 @@ incnmaster(const Arg *arg) {
  void
  initfont(const char *fontstr) {
  
@@ -93,7 +82,7 @@
  }
  
  #ifdef XINERAMA
-@@ -1762,7 +1786,7 @@ setup(void) {
+@@ -1916,7 +1940,7 @@ setup(void) {
  	initfont(font);
  	sw = DisplayWidth(dpy, screen);
  	sh = DisplayHeight(dpy, screen);
@@ -102,7 +91,7 @@
  	updategeom();
  	/* init atoms */
  	wmatom[WMProtocols] = XInternAtom(dpy, "WM_PROTOCOLS", False);
-@@ -1881,9 +1905,11 @@ textnw(const char *text, unsigned int le
+@@ -2043,9 +2067,11 @@ textnw(const char *text, unsigned int le
  	}
  	buf[ibuf]=0;
  

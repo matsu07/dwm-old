@@ -8,7 +8,7 @@
  #ifdef XINERAMA
  #include <X11/extensions/Xinerama.h>
  #endif /* XINERAMA */
-@@ -1256,7 +1257,7 @@
+@@ -1310,7 +1311,7 @@
  	XKeyEvent *ev;
  
  	ev = &e->xkey;

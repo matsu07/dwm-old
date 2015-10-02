@@ -1,6 +1,6 @@
 --- a/dwm.c	2012-11-15 23:14:47.120390000 +0530
 +++ b/dwm.c	2012-11-15 23:25:10.131303000 +0530
-@@ -300,2 +300,7 @@ static int xerrorstart(Display *dpy, XEr
+@@ -208,2 +208,7 @@
  static Monitor *createmon(void);
 +static void cycle(const Arg *, int, Bool move);
 +static void cyclenext(const Arg *);
@@ -8,10 +8,12 @@
 +static void cyclemovenext(const Arg *);
 +static void cyclemoveprev(const Arg *);
  static void destroynotify(XEvent *e);
-@@ -798,6 +803,60 @@ reload(const Arg *arg) {
+@@ -795,9 +800,63 @@
+ 	m->lt[0] = m->lts[m->curtag];
+ 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
+ 	strncpy(m->ltsymbol, m->lt[0]->symbol, sizeof m->ltsymbol);
  	return m;
  }
- 
 +
 +static void
 +cycle(const Arg *arg, int distance, Bool move)
@@ -69,3 +71,4 @@
  
  void
  destroynotify(XEvent *e) {
+ 	Client *c;

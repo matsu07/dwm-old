@@ -1,7 +1,7 @@
 diff -paur dwm.old/dwm.c dwm.new/dwm.c
 --- a/dwm.c	2012-06-23 12:14:32.635492292 +0200
 +++ b/dwm.c	2012-06-23 12:14:37.445544930 +0200
-@@ -240,6 +240,7 @@ static void maprequest(XEvent *e);
+@@ -245,6 +245,7 @@ static void maprequest(XEvent *e);
  static void monocle(Monitor *m);
  static void motionnotify(XEvent *e);
  static void movemouse(const Arg *arg);
@@ -9,7 +9,7 @@ diff -paur dwm.old/dwm.c dwm.new/dwm.c
  static Client *nexttiled(Client *c);
  static void pop(Client *);
  static void propertynotify(XEvent *e);
-@@ -1460,6 +1461,26 @@ movemouse(const Arg *arg) {
+@@ -1519,6 +1520,26 @@ movemouse(const Arg *arg) {
  	}
  }
  
