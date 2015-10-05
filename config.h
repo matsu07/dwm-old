@@ -10,6 +10,7 @@ static const char colors[NUMCOLORS][ColLast][8] ={
   { "#005577", "#eeeeee", "#005577" }, // 01|02 = selected
 };
 
+
 /*
 Solarized Dark Colors
 base03 002b36 1c1c1c bg
