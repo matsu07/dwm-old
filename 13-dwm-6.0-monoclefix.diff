@@ -1,8 +1,0 @@
---- a/dwm.c	2012-11-03 18:15:36.148188645 +0100
-+++ b/dwm.c	2012-11-06 12:19:31.545253818 +0100
-@@ -1468,5 +1468,3 @@
- 		if(ISVISIBLE(c))
- 			n++;
-- 	if(n > 0) /* override layout symbol */
-- 		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n);
- 	for(c = nexttiled(m->clients); c; c = nexttiled(c->next))
